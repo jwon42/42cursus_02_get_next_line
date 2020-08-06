@@ -1,22 +1,156 @@
-##  :notebook_with_decorative_cover: 42 cursus (2020/02/24~)
+## :notebook_with_decorative_cover: get_next_line
 
-| Circle | Order | Project                                                      | Language |                          Test tool                           |       Status       |    Score    | Pass date  |  Level   |
-| :----: | :---: | :----------------------------------------------------------- | :------: | :----------------------------------------------------------: | :----------------: | :---------: | :--------: | :------: |
-|   01   |  01   | [**Libft**](https://github.com/jwon42/42cursus/tree/master/01_Libft) |    C     |                                                              | :heavy_check_mark: | **115**/100 | 2020-04-16 |   1.03   |
-|   02   |  02   | [**get_next_line**](https://github.com/jwon42/42cursus/tree/master/02_get_next_line) |    C     | [:link:](https://github.com/jwon42/42cursus/tree/master/02_get_next_line#link-test-tools-links) | :heavy_check_mark: | **115**/100 | 2020-04-17 |   1.48   |
-|        |  03   | [**ft_printf**](https://github.com/jwon42/42cursus/tree/master/03_ft_printf) |    C     | [:link:](https://github.com/jwon42/42cursus/tree/master/03_ft_printf#link-test-tools-links) | :heavy_check_mark: | **100**/100 | 2020-05-04 |   1.88   |
-|        |  04   | **netwhat**                                                  |   n/a    |                                                              | :heavy_check_mark: | **100**/100 | 2020-05-05 |   2.03   |
-|   03   |  05   | [**ft_server**](https://github.com/jwon42/42cursus/tree/master/05_ft_server) |  Docker  |                                                              | :heavy_check_mark: | **100**/100 | 2020-05-07 |   2.30   |
-|        |  06   | [**Exam Rank 02**](https://github.com/jwon42/42cursus/tree/master/06_exam_rank_02) |    C     |                                                              | :heavy_check_mark: | **100**/100 | 2020-06-02 |   2.30   |
-|        |  07   | [**cub3d**](https://github.com/jwon42/42cursus/tree/master/07_cub3d) |    C     |                                                              | :heavy_check_mark: | **113**/100 | 2020-08-05 | **3.16** |
-|        |       | ~~**miniRT**~~                                               |          |                                                              |                    |             |            |          |
-|   04   |       | **ft_services**                                              |          |                                                              |                    |             |            |          |
-|        |       | **libasm**                                                   |          |                                                              |                    |             |            |          |
-|        |       | **minishell**                                                |          |                                                              |                    |             |            |          |
-|        |       | **Exam Rank 03**                                             |          |                                                              |                    |             |            |          |
-|        |       |                                                              |          |                                                              |                    |             |            |          |
+#### :page_facing_up: Prototype
 
-## :camera: Intra Profile
+- ```c
+  int	get_next_line(int fd, char **line);
+  ```
 
-https://profile.intra.42.fr/users/jwon
+#### :page_facing_up: ​Description
+
+- **Write a function which returns a line read from a file descriptor, without the newline.**
+
+#### :page_facing_up: Parameters
+
+- `int fd` : file descriptor for reading
+- `char **line` : The value of what has been read
+
+#### :page_facing_up: Return value
+
+- `1 ` : A line has been read
+- `0` : EOF has been reached
+- `-1` : An error happened
+
+------
+
+#### :page_facing_up: Comments In header file ([get_next_line.h](/02_get_next_line/get_next_line.h))
+
+- ```c
+  # include <stdlib.h> /* To use 'malloc', 'free' function */
+  # include <fcntl.h> /* To use 'read' function */
+  # include <unistd.h> /* To use 'write' function */
+  # include <limits.h> /* To use 'OPEN_MAX' defined macro */
+  
+  /* Libft functions */
+  size_t	ft_strlen(const char *str);
+  char	*ft_strdup(const char *str);
+  char	*ft_strchr(const char *str, int c);
+  char	*ft_substr(char const *s, unsigned int start, size_t len);
+  char	*ft_strjoin(char *s1, char *s2);
+  
+  /* Read 'buffer' and attach it to 'store' */
+  int	read_buffer(int fd, char **store);
+  /* Split 'store' by newline and save it in 'line' and 'store' */
+  void	split_store(char **store, char **line);
+  /* Check errors, call sub functions if needed, and return the value. */
+  int	get_next_line(int fd, char **line);
+  ```
+
+------
+
+#### :page_facing_up: Example
+
+- file.txt *(\n -> line feed)*
+
+  ```
+  "Lorem ipsum dolor sit amet,(/n)
+  consectetur adipiscing elit,(/n)
+  sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.(/n)
+  Ut enim ad minim veniam,(/n)
+  quis nostrud exercitation ullamco(/n)
+  laboris nisi ut aliquip ex ea commodo consequat.(/n)
+  Duis aute irure dolor in reprehenderit in(/n)
+  voluptate velit esse cillum dolore eu fugiat nulla pariatur.(/n)
+  Excepteur sint occaecat cupidatat non proident,(/n)
+  sunt in culpa qui officia deserunt mollit anim id est laborum."
+  ```
+
+------
+
+- main_01.c
+
+  ```c
+  #include <stdio.h>
+  
+  int main(void)
+  {
+  	int return_value;
+  	int fd;
+  	char *line = 0;
+  
+  	fd = open("./file.txt", O_RDONLY);
+  	return_value = get_next_line(fd, &line);
+  	printf("line %d : %s\n", idx, line);
+  	free(line);
+  	printf("\nreturn value = %d", return_value);
+  	return (0);
+  }
+  ```
+
+- a.out (`gcc gnl.c gnlutils.c gnl.h main_01.c -D BUFFER_SIZE=123`)
+
+  ```
+  line 1 : "Lorem ipsum dolor sit amet,
+  
+  return value = 1
+  ```
+
+------
+
+- main_02.c
+
+  ```c
+  #include <stdio.h>
+  
+  int main(void)
+  {
+  	int return_value;
+  	int fd;
+  	int idx;
+  	char *line = 0;
+  
+  	fd = open("./file.txt", O_RDONLY);
+  	idx = 1;
+  	while ((return_value = get_next_line(fd, &line)) > 0)
+  	{
+  		printf("line %d : %s\n", idx, line);
+  		idx++;
+  		free(line);
+  	}
+  	printf("line %d : %s\n", idx, line);
+  	free(line);
+  	printf("\nreturn value = %d", return_value);
+  	return (0);
+  }
+  ```
+
+- a.out (`gcc gnl.c gnlutils.c gnl.h main_02.c -D BUFFER_SIZE=123`)
+
+  ```
+  line 1 : "Lorem ipsum dolor sit amet,
+  line 2 : consectetur adipiscing elit,
+  line 3 : sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+  line 4 : Ut enim ad minim veniam,
+  line 5 : quis nostrud exercitation ullamco
+  line 6 : laboris nisi ut aliquip ex ea commodo consequat.
+  line 7 : Duis aute irure dolor in reprehenderit in
+  line 8 : voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+  line 9 : Excepteur sint occaecat cupidatat non proident,
+  line 10 : sunt in culpa qui officia deserunt mollit anim id est laborum."
+  
+  return value = 0
+  ```
+
+
+
+------
+
+#### :link: Test Tools Links
+
+- [**42TESTERS-GNL** by Mazoise](https://github.com/Mazoise/42TESTERS-GNL)
+
+- [**gnlkiller** by DontBreakAlex](https://github.com/DontBreakAlex/gnlkiller)
+
+- [**GNL_lover** by charMstr](https://github.com/charMstr/GNL_lover)
+- [**gnl-war-machine-v2019** by Alexandre94H](https://github.com/Alexandre94H/gnl-war-machine-v2019 )
 
