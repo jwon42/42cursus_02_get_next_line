@@ -31,7 +31,7 @@
 
 ------
 
-#### :page_facing_up: Comments In header file ([get_next_line.h](/02_get_next_line/get_next_line.h))
+#### :page_facing_up: Comments In header file ([get_next_line.h](/get_next_line.h))
 
 - ```c
   # include <stdlib.h> /* To use 'malloc', 'free' function */
