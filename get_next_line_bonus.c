@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwon <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: jwon <jwon@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 16:44:33 by jwon              #+#    #+#             */
-/*   Updated: 2020/05/26 20:52:01 by jwon             ###   ########.fr       */
+/*   Updated: 2021/01/18 22:05:59 by jwon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,5 +61,5 @@ int		get_next_line(int fd, char **line)
 		free(store[fd]);
 		store[fd] = NULL;
 	}
-	return ((bytes > 1) ? 1 : bytes);
+	return (bytes);
 }
