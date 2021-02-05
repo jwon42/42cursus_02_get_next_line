@@ -38,14 +38,14 @@
   # include <fcntl.h> /* To use 'read' function */
   # include <unistd.h> /* To use 'write' function */
   # include <limits.h> /* To use 'OPEN_MAX' defined macro */
-  
+
   /* Libft functions */
   size_t	ft_strlen(const char *str);
   char	*ft_strdup(const char *str);
   char	*ft_strchr(const char *str, int c);
   char	*ft_substr(char const *s, unsigned int start, size_t len);
   char	*ft_strjoin(char *s1, char *s2);
-  
+
   /* Read 'buffer' and attach it to 'store' */
   int	read_buffer(int fd, char **store);
   /* Split 'store' by newline and save it in 'line' and 'store' */
@@ -79,27 +79,29 @@
 
   ```c
   #include <stdio.h>
-  
+  #include <fcntl.h>
+  #include "get_next_line.h"
+
   int main(void)
   {
   	int return_value;
   	int fd;
   	char *line = 0;
-  
+
   	fd = open("./file.txt", O_RDONLY);
   	return_value = get_next_line(fd, &line);
-  	printf("line %d : %s\n", idx, line);
+  	printf("line : %s\n", line);
   	free(line);
   	printf("\nreturn value = %d", return_value);
   	return (0);
   }
   ```
 
-- a.out (`gcc gnl.c gnlutils.c gnl.h main_01.c -D BUFFER_SIZE=123`)
+- a.out (`gcc get_next_line.c get_next_line_utils.c get_next_line.h main_01.c -D BUFFER_SIZE=123`)
 
   ```
   line 1 : "Lorem ipsum dolor sit amet,
-  
+
   return value = 1
   ```
 
@@ -109,14 +111,16 @@
 
   ```c
   #include <stdio.h>
-  
+  #include <fcntl.h>
+  #include "get_next_line.h"
+
   int main(void)
   {
   	int return_value;
   	int fd;
   	int idx;
   	char *line = 0;
-  
+
   	fd = open("./file.txt", O_RDONLY);
   	idx = 1;
   	while ((return_value = get_next_line(fd, &line)) > 0)
@@ -132,7 +136,7 @@
   }
   ```
 
-- a.out (`gcc gnl.c gnlutils.c gnl.h main_02.c -D BUFFER_SIZE=123`)
+- a.out (`gcc get_next_line.c get_next_line_utils.c get_next_line.h main_02.c -D BUFFER_SIZE=123`)
 
   ```
   line 1 : "Lorem ipsum dolor sit amet,
@@ -145,7 +149,7 @@
   line 8 : voluptate velit esse cillum dolore eu fugiat nulla pariatur.
   line 9 : Excepteur sint occaecat cupidatat non proident,
   line 10 : sunt in culpa qui officia deserunt mollit anim id est laborum."
-  
+
   return value = 0
   ```
 
@@ -161,4 +165,3 @@
 
 - [**GNL_lover** by charMstr](https://github.com/charMstr/GNL_lover)
 - [**gnl-war-machine-v2019** by Alexandre94H](https://github.com/Alexandre94H/gnl-war-machine-v2019 )
-
